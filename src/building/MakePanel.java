@@ -12,7 +12,7 @@ public class MakePanel {
         JFrame f = new JFrame("Swing Paint Demo");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         DisplayPanel panel = new DisplayPanel();
-        panel.setBackground(Color.white);
+        panel.setBackground(Color.black);
         f.add(panel);
         f.pack();
         f.setVisible(true);

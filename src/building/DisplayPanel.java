@@ -14,41 +14,47 @@ import javax.swing.Timer;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
-import building.Structure;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class DisplayPanel extends JPanel {
-	private Random random = new Random();
+    private Random random = new Random();
     private Timer timer = null;
-	private ItemList list = new ItemList();
+    private ItemList list = new ItemList();
+    private MouseEvent e;
+    private boolean input;
     public DisplayPanel() {
         setBorder(BorderFactory.createLineBorder(Color.black));
         addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                if ((e.getModifiers() & InputEvent.BUTTON3_MASK) != 0) {
-                	// Right click
-                	
-                } else if((e.getModifiers() & InputEvent.BUTTON2_MASK) != 0) {
-                    // Middle click
-
-                } else {
-                	// Left click
-                	list.addBall();
-                }
+            public void mousePressed(MouseEvent mouse) {
+                input=true;
+                e=mouse;
             }
         });
-        timer = new Timer(60, new ActionListener(){
+        timer = new Timer(20, new ActionListener(){
             public void actionPerformed(ActionEvent e) {
-                list.progress();
                 repaint();
+                if(input) {
+                    input=false;
+                    handleInput();
+                }
             }
         });
         timer.start();
     }
-	public Dimension getPreferredSize() {
+            
+    public void handleInput() {
+        if ((e.getModifiers() & InputEvent.BUTTON3_MASK) != 0) {
+            // Right click - Create projectile
+            list.rightClick(e.getX(), e.getY());
+        } else if((e.getModifiers() & InputEvent.BUTTON2_MASK) != 0) {
+            // Middle click - Designate Armed Planet
+            list.middleClick(e.getX(), e.getY());
+        } else {
+            // Left click - Launch projectile
+            list.leftClick(e.getX(), e.getY());
+        }
+    }
+    public Dimension getPreferredSize() {
         return new Dimension(800,700);
     }
     @Override
